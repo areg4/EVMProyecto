@@ -1,10 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Perfil Usuario</title>
-</head>
-<body>
-	<h1>Perfil del Usuario</h1>
-	<h2>Nombre: {{ dataUser.nombre }}</h2>
-</body>
+	<head>
+		<title>Perfil Usuario</title>
+		{% load static %}
+		<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>	
+		<script defer type="text/javascript" src="{% static 'js/funciones.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/estilos.css' %}">
+	</head>
+	<body>
+		<!-- <h1>Perfil del Usuario</h1>
+		<h2>Nombre: {{ dataUser.nombre }}</h2> -->
+		<div class="container">
+			<div class="row border bg-primary" id="barraSuperior">
+				<div class="col-4">
+					<img id="imgPerfil" src="{% static 'imgs/user.png' %}" class="rounded-circle bg-white">
+				</div>
+				<div class="col-4 text-center">
+					<h2>Perfil de Administrador</h2>
+				</div>
+				<!-- <div class="col-4 text-center">
+					<p>Proyecto Activo: Ninguno</p>
+				</div> -->
+			</div>
+			<div class="row">
+				<div class="row text-center col-12">
+					<div class="col-6 btn selected menuA" id="mAdProyectos" data-id="{{dataUser.id}}"><h2>Proyectos</h2></div>
+					<div class="col-6 btn menuA" id="mAdEquipo"><h2>Equipo</h2></div>
+				</div>
+				<div class="row col-12" id="contPrincipal">
+					{{fragment}}
+				</div>
+			</div>
+			<!-- Modal -->
+			<div class="modal" tabindex="-1" role="dialog" id="modal-login">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title"></h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <p id="txtModal"></p>
+			      </div>
+			      <div class="modal-footer">
+			        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+			        <button id="btnCeMoCo" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- Fin Modal -->
+		</div>
+	</body>
 </html>

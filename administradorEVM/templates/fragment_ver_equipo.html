@@ -1,0 +1,33 @@
+{% load static %}
+<div class="container">
+	<div class="row text-center">
+		<div class="col-12 mt-4">
+			<h1>Miembros</h1>
+		</div>		
+	</div>
+	<div class="row text-center">
+		{% if not miembros %}
+			<h1>No Hay Miembros</h1>
+		{% else %}
+			
+			{% for miembro in miembros %}
+				<div class="col-4 contFolder miembroInfo" data-id="{{miembro.id}}">
+					<div class="col-12">
+						<img class="iconFolder" src="{% static 'imgs/miembro.png' %}">
+					</div>
+					<div class="col-12">
+						<h5>{{ miembro.nombre }}</h5>
+					</div>
+				</div>
+			{% endfor %}
+			<div class="col-4" id="addMiembroEquipo">
+				<div class="col-12 contFolder">
+					<img class="iconFolder" src="{% static 'imgs/add.png' %}">
+				</div>
+				<div class="col-12">
+					<h5>Agregar un Nuevo Miembro</h5>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</div>

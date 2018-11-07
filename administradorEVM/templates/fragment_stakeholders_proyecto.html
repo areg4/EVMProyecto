@@ -1,0 +1,55 @@
+<div class="row col-12">
+	<form onsubmit="return false" id="form-stakeholders" method="post" class="col-12">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+					<label>Miembro</label>
+					<select class="form-control" name="idMiembro">
+						<option value="">Seleccionar miembro...</option>
+						{% for usuario in usuarios %}
+							<option value="{{usuario.id}}"> {{usuario.nombre}} </option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label>Tiempo Asignado</label>
+					<input type="number" name="tiempoAsig" class="form-control" min="0" value=0>
+				</div>
+			</div>	
+		</div>
+		<div class="row mt-4">
+			<div class="col-12">
+				<div class="form-group">
+					<div class="col-12 text-right">
+						<input type="submit" name="addMiembro" id="addMiembro" class="btn btn-primary" value="Agregar Miembro">
+					</div>								
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="row col-12 mt-5">
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Nombre Clave</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Tiempo Asignado</th>
+				<th scope="col">Posición</th>
+				<th scope="col">Quitar</th>
+			</tr>
+		</thead>
+		{% for miembroP in miembrosProy %}
+			<tr>
+				<td scope="row"></td>
+				<td>{{miembroP.nombre}}</td>
+				<td>{{miembroP.tiempoAsignado}}</td>
+				<td>{% if miembroP.perfil == 1 %} Administrador {% else %} Programador {% endif %}</td>
+				<td><button class="btn btn-danger quitarMiembro" data-id-p="{{miembroP.idProyecto}}" data-id-m="{{miembroP.idUsuario}}">X</button></td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>

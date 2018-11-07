@@ -1,0 +1,48 @@
+<div class="container">
+	<div class="row text-center mt-4 mb-4">
+		<div class="col-12">
+			<h1>Agregar miembro de equipo</h1>
+		</div>		
+	</div>	
+	<div class="row">
+		<div class="col-12">
+			<form onsubmit="return false" id="form-add-perfil-miembro" method="post">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Nombre</label>
+							<input type="text" id="nombre" name="nombre" class="form-control inputActMiem">
+						</div>
+						<div class="form-group">
+							<label>Perfil</label>
+							<select class="form-control inputActMiem" name="perfil">
+								<option value="1">Administrador</option>
+								<option value="2">Programador</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Usuario: </label>
+							<input type="text" id="usuario" name="usuario" class="form-control inputActMiem">
+						</div>
+						<div class="form-group">
+							<label>Contraseña</label>
+							<input type="password" id="pass" name="pass" class="form-control inputActMiem">
+						</div>
+					</div>					
+				</div>
+				<div class="row mt-5">
+					<div class="col-12">
+						<div class="form-group">
+							<div class="col-12 text-center">
+								<input type="submit" name="altaMiembro" id="altaMiembro" class="btn btn-primary" value="Agregar miembro">
+							</div>								
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>	
+</div>

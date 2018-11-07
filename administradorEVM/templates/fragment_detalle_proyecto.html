@@ -1,0 +1,18 @@
+<!-- {% load static %} -->
+<div class="container">
+	<div class="row bg-info col-12">
+		<div id="oScope" class="col-3 text-center btn opcionProy" data-id="{{proyecto.id}}" data-flag="scope">Scope</div>
+		<div id="oStakeholders" class="col-3 text-center btn opcionProy" data-id="{{proyecto.id}}" data-flag="stakeholders">Stakeholders</div>
+		<div id="oMatrix" class="col-3 text-center btn opcionProy" data-id="{{proyecto.id}}" data-flag="matrix">Matrix</div>
+		<div id="oEstimation" class="col-3 text-center btn opcionProy" data-id="{{proyecto.id}}" data-flag="estimation">Estimation</div>
+	</div>
+	<div class="row text-center mt-4 mb-4">
+		<div class="col-12">
+			<h1>Detalles del Proyecto: {{proyecto.nombreProyecto}}</h1>
+		</div>		
+	</div>
+	<div id="contSeccion">
+		{{seccion}}
+	</div>
+	
+</div>

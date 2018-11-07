@@ -1,3 +1,48 @@
+textarea{
+	resize: none !important;
+}
 #row-login{
 	margin-top: 20%;
+}
+
+#imgPerfil{
+	width: 75px;
+	height: 75px;
+	cursor: pointer;
+}
+
+#imgPerfilMiembro{
+	width: 150px;
+	height: 150px;
+	cursor: pointer;
+}
+
+.selected{
+	background-color: red;
+}
+.menuA:hover{
+	background-color: pink;
+}
+
+.iconFolder{
+	width: 75px;
+	height: 75px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.contFolder{
+	cursor: pointer;
+}
+
+	.contFolder:hover{
+		background-color: blue;
+	}
+
+.opcionProy:hover{
+	background-color: violet;
+}
+
+.optSelected{
+	background: brown;
 }

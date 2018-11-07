@@ -26,6 +26,7 @@ class Proyectos_Usuarios(models.Model):
 	"""docstring for Proyectos_Usuarios"""
 	idProyecto = models.IntegerField(blank=True, null=True)
 	idUsuario = models.IntegerField(blank=True, null=True)
+	tiempoAsignado = models.FloatField(blank=True, null=True)
 
 class Actividades(models.Model):
 	"""docstring for Actividades"""

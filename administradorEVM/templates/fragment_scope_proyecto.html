@@ -1,0 +1,52 @@
+<div class="row col-12">
+	<form onsubmit="return false" id="form-scope" method="post" class="col-12">
+		{% csrf_token %}
+		<div class="row">
+			<div class="col-6">
+				<div class="form-group">
+					<label>Nombre del Proyecto</label>
+					<input type="text" id="nombreProyecto" name="nombreProyecto" class="form-control" value="{{proyecto.nombreProyecto}}" onchange="habilitarBoton(guardarScope)">
+				</div>
+				<div class="form-group">
+					<label>Resumen</label>
+					<textarea rows="4" class="form-control" name="resumen" placeholder="Resumen" onchange="habilitarBoton(guardarScope)">{{proyecto.resumen}}</textarea>
+				</div>
+				<div class="form-group">
+					<label>Objetivo Principal</label>
+					<input type="text" id="objetivoPrincipal" name="objetivoPrincipal" class="form-control" value="{{proyecto.objetivoPrincipal}}" onchange="habilitarBoton(guardarScope)">
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="form-group">
+					<label>Objetivos</label>
+					<textarea rows="4" class="form-control" name="objetivos" placeholder="Resumen" onchange="habilitarBoton(guardarScope)">{{proyecto.objetivos}}</textarea>
+				</div>
+				<div class="form-group">
+					<label>Fecha de Inicio</label>
+					<input type="date" id="fechaInicio" name="fechaInicio" class="form-control" value="{{proyecto.fechaInicio|date:'Y-m-d'}}" onchange="habilitarBoton(guardarScope)" >
+				</div>	
+				<div class="form-group">
+					<label>Fecha de Final</label>
+					<input src="image.gif" type="date" id="fechaFinal" name="fechaFinal" class="form-control" value="{{proyecto.fechaFinal|date:'Y-m-d'}}" onchange="habilitarBoton(guardarScope)">
+				</div>	
+				<div class="form-group">
+					<label>Responsable</label>
+					<select class="form-control" name="idResponsable" onchange="habilitarBoton(guardarScope)">
+						{% for usuario in usuarios %}
+							<option value="{{usuario.id}}" {% if proyecto.idResponsable == usuario.id %} selected {% endif %} > {{usuario.nombre}} </option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>	
+		</div>
+		<div class="row mt-5">
+			<div class="col-12">
+				<div class="form-group">
+					<div class="col-12 text-center">
+						<input type="submit" name="guardarScope" id="guardarScope" class="btn btn-primary" value="Actualizar" disabled="true">
+					</div>								
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
