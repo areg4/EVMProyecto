@@ -1,3 +1,38 @@
-<div class="row">
-	<h1>Estimation</h1>
+<div class="row col-12">
+	<div class="col-6">
+		<div class="form-group">
+			<label>Iteración</label>
+			<input type="date" class="form-control" value="{{iteracion}}">
+		</div>
+		<div class="form-group">
+			<label>Costo/Tiempo</label>
+			<input type="number" class="form-control">
+		</div>
+		<div class="form-group">
+			<label>EV</label>
+			<input type="text" class="form-control" value="{{ev}}" disabled readonly>
+		</div>
+		<div class="form-group">
+			<label>PV</label>
+			<input type="text" class="form-control" value="{{pv}}" disabled readonly>
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="form-group">
+			<label>Total Planed Cost</label>
+			<input type="text" class="form-control" value="{{tpc}}" disabled readonly>
+		</div>
+		<div class="form-group">
+			<label>Total Progress</label>
+			<input type="text" class="form-control" value="{{tp}}%" disabled readonly>
+		</div>
+		<div class="form-group">
+			<label>CPI</label>
+			<input type="text" class="form-control" value="{{cpi}}%" disabled readonly>
+		</div>
+		<div class="form-group">
+			<label>SPI</label>
+			<input type="text" class="form-control" value="{{spi}}%" disabled readonly>
+		</div>
+	</div>	
 </div>

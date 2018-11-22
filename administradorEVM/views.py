@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.template import loader
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -11,6 +13,9 @@ from EVMProject.settings import BASE_DIR
 from usuarioEVM import views as usuarioViews
 from administradorEVM.models import Proyectos
 from administradorEVM.models import Proyectos_Usuarios
+from administradorEVM.models import Actividades
+import time
+from pprint import pprint
 
 # Create your views here.
 def index(request):
@@ -33,7 +38,9 @@ def entrar(request):
 		if u.perfil == 1:
 			return perfilAdmin(request, dataUser)
 		if u.perfil == 2:
-			return usuarioViews.perfilUsuario(request, dataUser)
+			# return usuarioViews.perfilUsuario(request, dataUser)
+			# return redirect('/usuarioEVM/perfilProgramador/', idUser=dataUser.id)
+			return redirect(reverse('perfilProgramador', kwargs={"user_id": dataUser.id}))
 
 def perfilAdmin(request, dataUser):
 	proyectos = Proyectos.objects.filter(idResponsable = dataUser.id)
@@ -143,13 +150,149 @@ def quitarMiembroStake(request):
 def verMatrix(request):
 	idProy = request.GET['idP']
 	flag = request.GET['flag']
-	seccion = loader.render_to_string('fragment_matrix_proyecto.html')
+	actividades = Actividades.objects.filter(idProyecto=idProy)
+	actividadesNE = Actividades.objects.filter(idProyecto=idProy)
+	usuarios = Users.objects.filter(id__in=Proyectos_Usuarios.objects.filter(idProyecto=idProy).values('idUsuario'))
+	catalogoUsuarios = [usuarios.count] * 1000
+	catalogoActividades = [actividades.count] * 1000
+	for usuario in usuarios:
+		catalogoUsuarios[usuario.id]=usuario.nombre
+
+	for actividad in actividades:
+		catalogoActividades[actividad.id] = actividad.idActProy
+		
+	for actividad in actividades:
+		if actividad.idDependencia == 0:
+			actividad.idDependencia = 'NA'
+		else:
+			actividad.idDependencia = catalogoActividades[actividad.idDependencia]
+		actividad.idResponsable = catalogoUsuarios[actividad.idResponsable]
+		actividad.idAutoriza = catalogoUsuarios[actividad.idAutoriza]
+		actividad.idSoporte = catalogoUsuarios[actividad.idSoporte]
+		actividad.idInformar = catalogoUsuarios[actividad.idInformar]
+
+		if actividad.progreso is None:
+			actividad.progreso = "0"
+		if actividad.tiempoActual is None:
+			actividad.tiempoActual = "0"	
+
+	miLista = zip(actividades, actividadesNE)	
+
+	seccion = loader.render_to_string('fragment_matrix_proyecto.html', {'actividades':actividades, 'usuarios':usuarios, 'actividadesNE':actividadesNE, 'miLista':miLista})
 	return HttpResponse(seccion)
+
+@csrf_exempt
+def addActividad(request):
+	idActProy = request.POST['idTarea']
+	idDependencia = request.POST['idDependencia']
+	fechaEntrega = request.POST['fechaEntrega']
+	descripcion = request.POST['descripcion']
+	comentario = request.POST['comentario']
+	hrsPlaneadas = request.POST['hrsPlaneadas']
+	idResponsable = request.POST['idResponsable']
+	idAutoriza = request.POST['idAutoriza']
+	idSoporte = request.POST['idSoporte']
+	idInformar = request.POST['idInformar']
+	idProyecto = request.POST['idP']
+	if Actividades.objects.create(idActProy=idActProy,idDependencia=idDependencia,fechaEntrega=fechaEntrega,descripcion=descripcion,comentario=comentario,hrsPlaneadas=hrsPlaneadas,idResponsable=idResponsable,idAutoriza=idAutoriza,idSoporte=idSoporte,idInformar=idInformar,idProyecto=idProyecto) :
+		return HttpResponse('ok')
+	else:
+		return HttpResponse(status=204)
+
+@csrf_exempt
+def eliminarActividad(request):
+	# idAct = request.POST.get('idAct')
+	idAct = request.POST['idAct']
+	if Actividades.objects.filter(id=idAct).delete() :
+		return HttpResponse('ok')
+	else:
+		return HttpResponse(status=204)
+
+@csrf_exempt
+def updateActividad(request):
+	# print request
+	idA = request.POST['idA']
+	idActProy = request.POST['idTareaEdit']
+	idDependencia = request.POST['idDependenciaEdit']
+	fechaEntrega = request.POST['fechaEntregaEdit']
+	descripcion = request.POST['descripcionEdit']
+	comentario = request.POST['comentarioEdit']
+	hrsPlaneadas = request.POST['hrsPlaneadasEdit']
+	idResponsable = request.POST['idResponsableEdit']
+	idAutoriza = request.POST['idAutorizaEdit']
+	idSoporte = request.POST['idSoporteEdit']
+	idInformar = request.POST['idInformarEdit']
+	progreso = request.POST['progresoEdit']
+	tiempoActual = request.POST['tiempoActualEdit']
+	if Actividades.objects.filter(id=idA).update(idActProy=idActProy,idDependencia=idDependencia,fechaEntrega=fechaEntrega,descripcion=descripcion,comentario=comentario,hrsPlaneadas=hrsPlaneadas,idResponsable=idResponsable,idAutoriza=idAutoriza,idSoporte=idSoporte,idInformar=idInformar,progreso=progreso,tiempoActual=tiempoActual):
+		return HttpResponse('ok')
+	else:
+		return HttpResponse(status=204)
 
 def verEstimation(request):
 	idProy = request.GET['idP']
 	flag = request.GET['flag']
-	seccion = loader.render_to_string('fragment_estimation_proyecto.html')
+	actividades = Actividades.objects.filter(idProyecto=idProy)
+	evActividad = {}
+	pvActividad = {}
+	etcActividad = {}
+	iteracion = time.strftime("%Y-%m-%d")
+	evs = 0
+	pvs = 0
+	tpc = 0
+	tp = 0
+	acwp = 0
+	eac = 0
+	etcs = 0
+	cpi = 0
+	spi = 0
+	for actividad in actividades:
+		evActividad[actividad.id] = (actividad.progreso/100) * actividad.hrsPlaneadas
+		pvActividad[actividad.id] = (actividad.progreso/100) * actividad.hrsPlaneadas
+		etcActividad[actividad.id] = abs(actividad.hrsPlaneadas * (1- (actividad.progreso/100)))
+		if actividad.fechaEntrega.strftime("%Y-%m-%d") <= iteracion:
+			pvs = pvs + actividad.hrsPlaneadas
+
+		tpc = tpc + actividad.hrsPlaneadas
+		acwp = acwp + actividad.tiempoActual
+
+	for k,ev in evActividad.items():
+		evs = evs + ev
+	for k,etc in etcActividad.items():
+		etcs = etcs + etc
+
+	eac = abs(acwp) + etcs
+	tp = acwp / eac
+	tp = tp*100
+	tp = abs(tp)
+	tp = round(tp,2)
+	cpi = evs / acwp
+	cpi = cpi*100
+	cpi = abs(cpi)
+	cpi = round(cpi,2)
+	spi = evs / pvs
+	spi = spi*100
+	spi = abs(spi)
+	spi = round(spi,2)
+	# print 'evs'
+	# print evs
+	# print 'pvs'
+	# print pvs
+	# print 'tpc'
+	# print tpc
+	# print 'tp'
+	# print tp
+	# print 'acwp'
+	# print acwp
+	# print 'eac'
+	# print eac
+	# print 'etcs'
+	# print etcs
+	# print 'cpi'
+	# print cpi
+	# print 'spi'
+	# print spi
+	seccion = loader.render_to_string('fragment_estimation_proyecto.html', {'iteracion':iteracion,'ev':evs,'pv':pvs,'tpc':tpc,'tp':tp,'cpi':cpi,'spi':spi})
 	return HttpResponse(seccion)
 
 

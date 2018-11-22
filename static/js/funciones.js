@@ -491,6 +491,200 @@ jQuery(document).ready(function($){
 			}
 		});
 	});
+
+
+	// actividades
+	$(document).on("click", "#desplegarFormAddTarea",function(){
+		if ($(this).hasClass('desplegarForm')) {
+			$(this).removeClass('desplegarForm');
+			$(this).addClass('ocultarForm');
+			$("#iconAddAct").attr('src', '/static/imgs/subir.png');
+			$("#sFormTarea").removeClass('formOculto');
+		}else if($(this).hasClass('ocultarForm')){
+			$(this).removeClass('ocultarForm');
+			$(this).addClass('desplegarForm');
+			$("#iconAddAct").attr('src', '/static/imgs/addTask.png');
+			$("#sFormTarea").addClass('formOculto');
+		}
+	});
+	$(document).on("click", "#addTarea",function(){
+		var formData = new FormData($("#form-Tarea")[0]);
+		validacion = 0;
+		for(inp of formData.entries()){
+			inp[1] = inp[1].trim();
+			if (inp[1]=="") {
+				validacion = 1;
+			}
+		}
+		formData.append('idP', $("#oMatrix").attr('data-id'));
+		if (validacion == 0) {
+			$.ajax({
+		    	url: '/administradorEVM/addActividad/',
+		     	type: 'post',
+		      	data: formData,
+		      	cache: false,
+		      	contentType: false,
+		      	processData: false,
+		      	success:function(data, textStatus, jqXHR) {
+		      		if (jqXHR.status == '204') {
+		      			$("#txtModal").html("Error al dar de alta la actividad");
+		      			$("#modal-login").modal();
+		      		}
+		      		$('.modal-title').html('Agregar Actividad');
+		      		$("#txtModal").html("Actividad Agregada");
+		      		$("#btnCeMoCo").addClass('moAddActividad');
+		      		$("#modal-login").modal();
+		      		console.log(data);
+		      			      	
+		      	}
+		    });
+		}else{
+			$('.modal-title').html('Error');
+			$("#txtModal").html("Faltan campos por rellenar");
+		    $("#modal-login").modal();
+		}
+	});
+
+	$(document).on("click", ".moAddActividad",function(){
+		$("#btnCeMoCo").removeClass('moAddActividad');
+		flag = $("#oMatrix").attr('data-flag');
+		idP = $("#oMatrix").attr('data-id');
+		parametros = {
+			'idP'	: idP,
+			'flag'	: flag
+		}
+		$.ajax({
+			url: '/administradorEVM/verMatrix/',
+			type: 'get',
+	      	data: parametros,
+			success:function(data){
+				$("#contSeccion").html(data);
+			}
+		});
+	});
+
+	$(document).on("click", ".btnEliminarActividad",function(){
+		idAct = $(this).attr('data-id');
+		parametros = {
+			'idAct': idAct
+		}
+		$.ajax({
+	    	url: '/administradorEVM/eliminarActividad/',
+	     	type: 'post',
+	      	data: parametros,
+	      	success:function(data, textStatus, jqXHR) {
+	      		if (jqXHR.status == '204') {
+	      			$("#txtModal").html("Error al eliminar la actividad");
+	      			$("#modal-login").modal();
+	      		}
+	      		$('.modal-title').html('Eliminar Actividad');
+	      		$("#txtModal").html("Actividad Eliminada");
+	      		$("#btnCeMoCo").addClass('moElimAct');
+	      		$("#modal-login").modal();   			      	
+	      	}
+	    });
+	});
+	$(document).on("click", ".moElimAct",function(){
+		$("#btnCeMoCo").removeClass('moElimAct');
+		flag = $("#oMatrix").attr('data-flag');
+		idP = $("#oMatrix").attr('data-id');
+		parametros = {
+			'idP'	: idP,
+			'flag'	: flag
+		}
+		$.ajax({
+			url: '/administradorEVM/verMatrix/',
+			type: 'get',
+	      	data: parametros,
+			success:function(data){
+				$("#contSeccion").html(data);
+			}
+		});
+	});
+
+	// editar actividades 
+	$(document).on("click", ".btnEditarActividad",function(){
+		id = $(this).attr('data-id');
+		$(".bloqueFijo-"+id).css('display', 'none');
+		$(".bloqueEdit-"+id).removeClass('bloqueEditable');
+		$(".editar-guardar").html('Guardar');
+		$(".eliminar-cancelar").html('Cancelar');
+	});
+
+	$(document).on("click", ".btnCancelarEditActividad",function(){
+		id = $(this).attr('data-id');
+		$(".bloqueFijo-"+id).css('display', '');
+		$(".bloqueEdit-"+id).addClass('bloqueEditable');
+		$(".editar-guardar").html('Editar');
+		$(".eliminar-cancelar").html('Eliminar');
+	});
+
+	$(document).on("click", ".btnGuardarEditarActividad",function(){
+		idAct = $(this).attr('data-id');
+		var formData = new FormData();
+		formData.append('idA', idAct);
+		formData.append('idTareaEdit', $("#idTareaEdit"+idAct).val());
+		formData.append('idDependenciaEdit', $("#idDependenciaEdit"+idAct).val());
+		formData.append('fechaEntregaEdit', $("#fechaEntregaEdit"+idAct).val());
+		formData.append('descripcionEdit', $("#descripcionEdit"+idAct).val());
+		formData.append('comentarioEdit', $("#comentarioEdit"+idAct).val());
+		formData.append('hrsPlaneadasEdit', $("#hrsPlaneadasEdit"+idAct).val());
+		formData.append('idResponsableEdit', $("#idResponsableEdit"+idAct).val());
+		formData.append('idAutorizaEdit', $("#idAutorizaEdit"+idAct).val());
+		formData.append('idSoporteEdit', $("#idSoporteEdit"+idAct).val());
+		formData.append('idInformarEdit', $("#idInformarEdit"+idAct).val());
+		formData.append('progresoEdit', $("#progresoEdit"+idAct).val());
+		formData.append('tiempoActualEdit', $("#tiempoActualEdit"+idAct).val());
+		validacion = 0;
+		for(inp of formData.entries()){
+			inp[1] = inp[1].trim();
+			if (inp[1]=="") {
+				validacion = 1;
+			}
+		}		
+		if (validacion == 0) {
+			$.ajax({
+		    	url: '/administradorEVM/updateActividad/',
+		     	type: 'post',
+		      	data: formData,
+		      	cache: false,
+		      	contentType: false,
+		      	processData: false,
+		      	success:function(data, textStatus, jqXHR) {
+		      		if (jqXHR.status == '204') {
+		      			$("#txtModal").html("Error al actualizar la actividad");
+		      			$("#modal-login").modal();
+		      		}
+		      		$('.modal-title').html('Actualizar Actividad');
+		      		$("#txtModal").html("Actividad Actualizada");
+		      		$("#btnCeMoCo").addClass('moUpdActividad');
+		      		$("#modal-login").modal();		      			      	
+		      	}
+		    });
+		}else{
+			$('.modal-title').html('Error');
+			$("#txtModal").html("Faltan campos por rellenar");
+		    $("#modal-login").modal();
+		}
+	});
+
+	$(document).on("click", ".moUpdActividad",function(){
+		$("#btnCeMoCo").removeClass('moUpdActividad');
+		flag = $("#oMatrix").attr('data-flag');
+		idP = $("#oMatrix").attr('data-id');
+		parametros = {
+			'idP'	: idP,
+			'flag'	: flag
+		}
+		$.ajax({
+			url: '/administradorEVM/verMatrix/',
+			type: 'get',
+	      	data: parametros,
+			success:function(data){
+				$("#contSeccion").html(data);
+			}
+		});
+	});
 });
 
 function addProyecto(){

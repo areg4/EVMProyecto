@@ -46,3 +46,21 @@ textarea{
 .optSelected{
 	background: brown;
 }
+
+.formOculto{
+	display: none !important;
+}
+
+#desplegarFormAddTarea img{
+	width: 40px;
+	height: 40px;
+}
+
+.iconOpciones{
+	width: 30px;
+	height: 30px;
+}
+
+.bloqueEditable{
+	display: none;
+}

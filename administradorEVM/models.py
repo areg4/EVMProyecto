@@ -30,6 +30,7 @@ class Proyectos_Usuarios(models.Model):
 
 class Actividades(models.Model):
 	"""docstring for Actividades"""
+	idProyecto = models.IntegerField(blank=True, null=True)
 	idActProy = models.CharField(max_length=10, blank=True, null=True)
 	idDependencia =  models.IntegerField(blank=True, null=True)
 	fechaEntrega = models.DateField(auto_now=False, blank=True, null=True)
@@ -40,5 +41,5 @@ class Actividades(models.Model):
 	idAutoriza = models.IntegerField(blank=True, null=True)
 	idSoporte = models.IntegerField(blank=True, null=True)
 	idInformar = models.IntegerField(blank=True, null=True)
-	progreso = models.FloatField(blank=True, null=True)
-	tiempoActual = models.FloatField(blank=True, null=True)
+	progreso = models.FloatField(blank=True, null=True, default=0)
+	tiempoActual = models.FloatField(blank=True, null=True, default=0)

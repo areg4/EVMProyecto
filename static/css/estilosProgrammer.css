@@ -1,0 +1,40 @@
+textarea{
+	resize: none !important;
+}
+#imgPerfil{
+	width: 75px;
+	height: 75px;
+	cursor: pointer;
+}
+
+.iconFolder{
+	width: 75px;
+	height: 75px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.contFolder{
+	cursor: pointer;
+}
+
+	.contFolder:hover{
+		background-color: blue;
+	}
+
+.camposEditables{
+	display: none;
+}
+
+.iconOpciones{
+	width: 30px;
+	height: 30px;
+}
+
+.opcionProyP:hover{
+	background-color: violet;
+}
+
+.optSelectedP{
+	background: brown;
+}

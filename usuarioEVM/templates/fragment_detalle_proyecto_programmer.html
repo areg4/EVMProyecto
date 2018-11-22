@@ -1,0 +1,91 @@
+{% load static %}
+<div class="row col-12 text-center">
+	{{menuProg}}
+	<div class="col-12 mt-4">
+		<h1>Datos Proyecto</h1>
+	</div>		
+	<div class="col-6">
+		<div class="form-group">
+			<label>Nombre del Proyecto</label>
+			<input type="text" disabled readonly class="form-control" value="{{proyecto.nombreProyecto}}">
+		</div>
+		<div class="form-group">
+			<label>Resumen</label>
+			<textarea rows="4" class="form-control" readonly disabled>{{proyecto.resumen}}</textarea>
+		</div>
+		<div class="form-group">
+			<label>Objetivo Principal</label>
+			<input type="text" readonly disabled class="form-control" value="{{proyecto.objetivoPrincipal}}">
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="form-group">
+			<label>Objetivos</label>
+			<textarea rows="4" class="form-control" readonly disabled>{{proyecto.objetivos}}</textarea>
+		</div>
+		<div class="form-group">
+			<label>Fecha de Inicio</label>
+			<input type="date" readonly disabled class="form-control" value="{{proyecto.fechaInicio|date:'Y-m-d'}}">
+		</div>	
+		<div class="form-group">
+			<label>Fecha de Final</label>
+			<input type="date" readonly disabled class="form-control" value="{{proyecto.fechaFinal|date:'Y-m-d'}}">
+		</div>	
+		<div class="form-group">
+			<label>Responsable</label>
+			<select class="form-control" disabled readonly>
+				{% for usuario in usuarios %}
+					<option value="{{usuario.id}}" {% if proyecto.idResponsable == usuario.id %} selected {% endif %} > {{usuario.nombre}} </option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>	
+</div>
+<div class="row col-12 mt-5 text-center">
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">ID Actividad</th>
+				<th scope="col">ID Dependencia</th>
+				<th scope="col">Fecha Entrega</th>
+				<th scope="col">Descripción</th>
+				<th scope="col">Comentarios</th>
+				<th scope="col">Hrs. Planeadas</th>
+				<th scope="col">Responsable</th>
+				<th scope="col">Autoriza</th>
+				<th scope="col">Soporte</th>
+				<th scope="col">Informar a</th>
+				<th scope="col">Progreso</th>
+				<th scope="col">Tiempo Actual</th>
+				<th class="editar-guardar" scope="col">Editar</th>
+				<th class="eliminar-cancelar" scope="col"></th>
+			</tr>
+		</thead>
+		{% for actividad in actividades %}			
+			<tr class="bloqueFijo-{{actividad.id}}">
+				<td scope="row">{{actividad.idActProy}}</td>
+				<td>{{actividad.idDependencia}}</td>
+				<td>{{actividad.fechaEntrega}}</td>
+				<td>{{actividad.descripcion}}</td>
+				<td>{{actividad.comentario}}</td>
+				<td>{{actividad.hrsPlaneadas}}</td>
+				<td>{{actividad.idResponsable}}</td>
+				<td>{{actividad.idAutoriza}}</td>
+				<td>{{actividad.idSoporte}}</td>
+				<td>{{actividad.idInformar}}</td>
+				
+				<td class="camposFijos-{{actividad.id}}">{{actividad.progreso}}%</td>
+				<td class="camposEditables camposEditables-{{actividad.id}}"><input type="number" id="progresoEdit{{actividad.id}}" class="form-control" value="{{actividad.progreso}}"></td>
+
+				<td class="camposFijos-{{actividad.id}}">{{actividad.tiempoActual}}</td>
+				<td class="camposEditables camposEditables-{{actividad.id}}"><input type="number" id="tiempoActualEdit{{actividad.id}}" class="form-control" value="{{actividad.tiempoActual}}"></td>
+
+				<td class="camposFijos-{{actividad.id}}"><button class="btn btn-primary btnEditarActividad" data-id='{{actividad.id}}'><img class="iconOpciones" src="{% static 'imgs/editar.png' %}"></button></td>
+				<td class="camposEditables camposEditables-{{actividad.id}}"><button class="btn btn-primary btnGuardarEditarActividad" data-id='{{actividad.id}}'><img class="iconOpciones" src="{% static 'imgs/guardar.png' %}"></button></td>
+
+				
+				<td class="camposEditables camposEditables-{{actividad.id}}"><button class="btn btn-danger btnCancelarEditActividad" data-id='{{actividad.id}}'><img class="iconOpciones" src="{% static 'imgs/x.png' %}"></button></td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>

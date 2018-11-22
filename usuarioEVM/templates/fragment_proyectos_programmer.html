@@ -1,0 +1,24 @@
+{% load static %}
+<div class="container">
+	<div class="row text-center mt-4 mb-4">
+		<div class="col-12">
+			<h1>Proyectos Activos</h1>
+		</div>		
+	</div>
+	<div class="row text-center">
+		{% if not proyectos %}
+			<h1>No Hay Proyectos</h1>
+		{% else %}			
+			{% for proyecto in proyectos %}
+				<div class="col-4 contFolder detalleProyectoProgra" dataU-id="{{idUsuario}}" data-id="{{proyecto.id}}">
+					<div class="col-12">
+						<img class="iconFolder" src="{% static 'imgs/folder.png' %}">
+					</div>
+					<div class="col-12">
+						<h5>{{ proyecto.nombreProyecto }}</h5>
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>

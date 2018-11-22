@@ -24,4 +24,8 @@ urlpatterns = [
     url(r'^addMiembroEquipo/$', views.addMiembroEquipo, name='addMiembroEquipo'),
     url(r'^altaMiembro/$', views.altaMiembro, name='altaMiembro'),
 
+    url(r'^addActividad/$', views.addActividad, name='addActividad'),
+    url(r'^eliminarActividad/$', views.eliminarActividad, name='eliminarActividad'),
+    url(r'^updateActividad/$', views.updateActividad, name='updateActividad'),
+
 ]
