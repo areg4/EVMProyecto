@@ -155,6 +155,8 @@ def verMatrix(request):
 	usuarios = Users.objects.filter(id__in=Proyectos_Usuarios.objects.filter(idProyecto=idProy).values('idUsuario'))
 	catalogoUsuarios = [usuarios.count] * 1000
 	catalogoActividades = [actividades.count] * 1000
+	catalogoActividadTiempo = [actividades.count] * 1000
+	iteracion = time.strftime("%Y-%m-%d")
 	for usuario in usuarios:
 		catalogoUsuarios[usuario.id]=usuario.nombre
 

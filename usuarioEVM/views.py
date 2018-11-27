@@ -9,6 +9,7 @@ from administradorEVM.models import Users
 from administradorEVM.models import Proyectos
 from administradorEVM.models import Proyectos_Usuarios
 from administradorEVM.models import Actividades
+import time
 
 # Create your views here.
 # def index(request):
@@ -33,8 +34,8 @@ def detalleProyecto(request):
 	actividades = Actividades.objects.filter(idProyecto=idProy, idResponsable=idUsuario)
 	proyecto = Proyectos.objects.get(id=idProy)
 	usuarios = Users.objects.filter()
-	catalogoUsuarios = [usuarios.count] * 10
-	catalogoActividades = [actividades.count] * 10
+	catalogoUsuarios = [usuarios.count] * 10000
+	catalogoActividades = [actividades.count] * 10000
 	for usuario in usuarios:
 		catalogoUsuarios[usuario.id]=usuario.nombre
 
@@ -75,6 +76,66 @@ def estimacionProyecto(request):
 	idUsuario = request.GET['idU']
 	flag = request.GET['flag']
 	proyecto = Proyectos.objects.get(id=idProy)
-	menuProg = loader.render_to_string('fragment_menu_programmer.html',{'flag':flag, 'proyecto':proyecto, 'idUsuario': idUsuario});
-	seccion = loader.render_to_string('fragment_estimacion_proyecto_programmer.html', {'menuProg':menuProg})
+	actividades = Actividades.objects.filter(idProyecto=idProy)
+	evActividad = {}
+	pvActividad = {}
+	etcActividad = {}
+	iteracion = time.strftime("%Y-%m-%d")
+	evs = 0
+	pvs = 0
+	tpc = 0
+	tp = 0
+	acwp = 0
+	eac = 0
+	etcs = 0
+	cpi = 0
+	spi = 0
+	for actividad in actividades:
+		evActividad[actividad.id] = (actividad.progreso/100) * actividad.hrsPlaneadas
+		pvActividad[actividad.id] = (actividad.progreso/100) * actividad.hrsPlaneadas
+		etcActividad[actividad.id] = abs(actividad.hrsPlaneadas * (1- (actividad.progreso/100)))
+		if actividad.fechaEntrega.strftime("%Y-%m-%d") <= iteracion:
+			pvs = pvs + actividad.hrsPlaneadas
+
+		tpc = tpc + actividad.hrsPlaneadas
+		acwp = acwp + actividad.tiempoActual
+
+	for k,ev in evActividad.items():
+		evs = evs + ev
+	for k,etc in etcActividad.items():
+		etcs = etcs + etc
+
+	eac = abs(acwp) + etcs
+	tp = acwp / eac
+	tp = tp*100
+	tp = abs(tp)
+	tp = round(tp,2)
+	cpi = evs / acwp
+	cpi = cpi*100
+	cpi = abs(cpi)
+	cpi = round(cpi,2)
+	spi = evs / pvs
+	spi = spi*100
+	spi = abs(spi)
+	spi = round(spi,2)
+	# print 'evs'
+	# print evs
+	# print 'pvs'
+	# print pvs
+	# print 'tpc'
+	# print tpc
+	# print 'tp'
+	# print tp
+	# print 'acwp'
+	# print acwp
+	# print 'eac'
+	# print eac
+	# print 'etcs'
+	# print etcs
+	# print 'cpi'
+	# print cpi
+	# print 'spi'
+	# print spi
+	menuProg = loader.render_to_string('fragment_menu_programmer.html',{'flag':flag, 'proyecto':proyecto, 'idUsuario': idUsuario})
+	seccion = loader.render_to_string('fragment_estimacion_proyecto_programmer.html', {'iteracion':iteracion,'ev':evs,'pv':pvs,'tpc':tpc,'tp':tp,'cpi':cpi,'spi':spi, 'menuProg':menuProg})
 	return HttpResponse(seccion)

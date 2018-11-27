@@ -1,5 +1,13 @@
+body{
+	background: #F4F7FE !important;
+	color: #141515 !important;
+}
 textarea{
 	resize: none !important;
+}
+#barraSuperior{
+	background: #356280;
+	color: #F4F7FE;
 }
 #imgPerfil{
 	width: 75px;
@@ -19,7 +27,7 @@ textarea{
 }
 
 	.contFolder:hover{
-		background-color: blue;
+		background-color: #33A481;
 	}
 
 .camposEditables{
@@ -32,9 +40,10 @@ textarea{
 }
 
 .opcionProyP:hover{
-	background-color: violet;
+	background-color: #FFD4D4;
 }
 
 .optSelectedP{
-	background: brown;
+	background: #EA6C4A;
+	color: #F4F7FE;
 }
